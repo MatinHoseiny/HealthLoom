@@ -1,0 +1,76 @@
+/* Shimmer Button Styles */
+.shimmer-button {
+    position: relative;
+    overflow: hidden;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-family);
+}
+
+.shimmer-button-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+}
+
+/* Primary variant - Cyan to Blue gradient */
+.shimmer-button-primary {
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+}
+
+.shimmer-button-primary:hover {
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.6);
+}
+
+/* Success variant - Green */
+.shimmer-button-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+/* Danger variant - Red */
+.shimmer-button-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+/* Shimmer Effect */
+.shimmer-effect {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 100%);
+    animation: shimmer 2.5s infinite;
+    z-index: 1;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* Disabled state */
+.shimmer-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.shimmer-button:disabled .shimmer-effect {
+    animation: none;
+}

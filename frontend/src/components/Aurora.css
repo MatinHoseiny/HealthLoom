@@ -1,0 +1,105 @@
+/* ========================================
+    AURORA BACKGROUND EFFECT - HIGH VISIBILITY & FAST
+    ======================================== */
+
+.aurora-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+    background: transparent;
+}
+
+.aurora-gradient {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 1.0;
+    z-index: 2;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.aurora-1 {
+    top: -10%;
+    /* Start slightly off-screen for better entry */
+    left: -10%;
+    width: 800px;
+    /* Larger size */
+    height: 800px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.8) 0%, transparent 70%);
+    /* Bright Cyan (Greenish) */
+    animation-name: aurora-float-1;
+    animation-duration: 7s;
+    /* Slightly different timing */
+}
+
+.aurora-2 {
+    top: 20%;
+    right: -10%;
+    width: 900px;
+    height: 900px;
+    background: radial-gradient(circle, rgba(145, 109, 179, 0.8) 0%, transparent 70%);
+    /* User Purple */
+    animation-name: aurora-float-2;
+    animation-duration: 5s;
+}
+
+.aurora-3 {
+    bottom: -10%;
+    left: 10%;
+    width: 850px;
+    height: 850px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, transparent 70%);
+    /* User Blue */
+    animation-name: aurora-float-3;
+    animation-duration: 6s;
+}
+
+/* MOVEMENT KEYFRAMES - EXAGGERATED FOR VISIBILITY */
+@keyframes aurora-float-1 {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(300px, 150px) scale(1.2);
+    }
+}
+
+@keyframes aurora-float-2 {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(-300px, -150px) scale(1.1);
+    }
+}
+
+@keyframes aurora-float-3 {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(250px, -250px) scale(0.9);
+    }
+}
+
+.aurora-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--aurora-overlay);
+    /* Dynamic overlay */
+    z-index: 1;
+}

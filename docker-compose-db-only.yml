@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: healthloom-db
+    environment:
+      POSTGRES_DB: healthloom
+      POSTGRES_USER: healthloom
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-healthloom_dev_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/migrations:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U healthloom" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - healthloom-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  healthloom-network:
+    driver: bridge

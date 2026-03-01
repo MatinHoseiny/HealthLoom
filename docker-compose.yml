@@ -1,0 +1,126 @@
+version: '3.8'
+
+services:
+  # ==================================================
+  # POSTGRESQL DATABASE
+  # ==================================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: healthloom-db
+    environment:
+      POSTGRES_DB: healthloom
+      POSTGRES_USER: healthloom
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-healthloom_dev_password_change_in_prod}
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=en_US.UTF-8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/migrations:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U healthloom" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - healthloom-network
+    restart: unless-stopped
+
+  # ==================================================
+  # FASTAPI BACKEND
+  # ==================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: healthloom-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Database
+      DATABASE_URL: postgresql://healthloom:${DB_PASSWORD:-healthloom_dev_password_change_in_prod}@postgres:5432/healthloom
+      DB_PASSWORD: ${DB_PASSWORD:-healthloom_dev_password_change_in_prod}
+
+      # AI Services
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash-exp}
+
+      # Observability
+      LANGFUSE_ENABLED: ${LANGFUSE_ENABLED:-false}
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
+      LANGFUSE_HOST: ${LANGFUSE_HOST:-https://cloud.langfuse.com}
+
+      # Application
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+      API_RELOAD: ${API_RELOAD:-true}
+
+      # CORS
+      CORS_ORIGINS: http://localhost:5173,http://localhost:3000,http://frontend:5173
+
+      # Security
+      SECRET_KEY: ${SECRET_KEY:-development-secret-key-CHANGE-IN-PRODUCTION}
+
+      # Logging
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      LOG_FORMAT: json
+    volumes:
+      - ./backend:/app
+      - backend_uploads:/app/uploads
+      - backend_logs:/app/logs
+    ports:
+      - "8888:8000"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - healthloom-network
+    restart: unless-stopped
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # ==================================================
+  # REACT FRONTEND
+  # ==================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: healthloom-frontend
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-/api}
+      VITE_API_WS_URL: ${VITE_API_WS_URL:-ws://localhost:8000/api}
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    networks:
+      - healthloom-network
+    restart: unless-stopped
+    command: npm run dev -- --host 0.0.0.0
+
+# ==================================================
+# VOLUMES
+# ==================================================
+volumes:
+  postgres_data:
+    driver: local
+  backend_uploads:
+    driver: local
+  backend_logs:
+    driver: local
+
+# ==================================================
+# NETWORKS
+# ==================================================
+networks:
+  healthloom-network:
+    driver: bridge
