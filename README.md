@@ -2,139 +2,111 @@
   <img src="media/logo.png" alt="HealthLoom Logo" width="250" />
 </p>
 
-<p align="center" style="color: #aaaaaa; font-size: 15px;">
-  An intelligent, secure health document analysis tool — upload, analyze, and understand your medical history.
+<p align="center" style="color: #555555; font-size: 15px;">
+  Secure medical document analysis and processing application.
 </p>
 
 <div align="center">
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/MatinHoseiny/HealthLoom)
 [![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
-[![Docker](https://img.shields.io/badge/Docker-Supported-blue.svg)]()
+[![Docker](https://img.shields.io/badge/Docker-Supported-blue.svg)](#docker-deployment)
 
 </div>
 
-<hr style="height:2px;border:none;background:linear-gradient(90deg,#00c6ff,#0072ff);border-radius:1px;">
+---
 
-## 🚀 Highlights
-<div align="center">
+## Features
 
-| | |
-|:--:|:--:|
-| 📄 **Smart Document Analysis** | AI-driven medical document parsing |
-| 💊 **Medication Tracking** | Automatic extraction and profiling |
-| 💬 **Interactive Chat** | Context-aware AI assistant |
-| 🔒 **Secure Storage** | Localized file and data tracking |
+* **Document Processing:** Automated parsing of PDF and text-based medical records.
+* **Entity Extraction:** Identifies and profiles medications, dosages, and relevant medical history.
+* **Contextual Analysis:** Interactive interface for querying uploaded document data.
+* **Data Security:** Localized file storage and tracking within the deployment environment.
 
-</div>
+---
 
-<hr style="height:2px;border:none;background:linear-gradient(90deg,#00c6ff,#0072ff);border-radius:1px;">
+## System Architecture
 
-## 📸 App Media
+HealthLoom utilizes a microservices-oriented architecture designed for accurate and performant health data extraction.
 
-<div align="center">
-  <table>
-    <tr>
-      <td align="center" width="50%">
-        <img src="" alt="Upload Interface" width="95%" style="border-radius:14px; box-shadow:0 0 15px rgba(0,0,0,0.35); margin:8px;" /><br>
-        <sub><b>Upload Interface</b><br><i>Seamlessly add your medical documents</i></sub>
-      </td>
-      <td align="center" width="50%">
-        <img src="" alt="Analysis Chat" width="95%" style="border-radius:14px; box-shadow:0 0 15px rgba(0,0,0,0.35); margin:8px;" /><br>
-        <sub><b>Analysis Chat</b><br><i>Talk dynamically with your data</i></sub>
-      </td>
-    </tr>
-  </table>
-</div>
+### Backend Infrastructure
 
-<hr style="height:2px;border:none;background:linear-gradient(90deg,#00c6ff,#0072ff);border-radius:1px;">
+The backend is engineered for reliability and high performance, leveraging **FastAPI** for concurrent request handling and efficient API routing. The core logic is powered by **LangGraph**, which orchestrates a specialized processing pipeline:
 
-## ⚙️ System Overview
+* **Ingestion Engine:** Implements advanced document parsing with cryptographic hashing to prevent redundant processing of identical files, saving system resources.
+* **Extraction Pipeline:** Dedicated processing nodes designed specifically for medical entity recognition, extracting critical data such as prescriptions, dosages, and contraindications.
+* **Dynamic Routing:** An intelligent routing mechanism that evaluates user queries and directs them to the optimal subsystem (e.g., retrieving specific document context, accessing patient history, or querying general medical knowledge).
+* **Data Persistence:** Utilizes **PostgreSQL** with async SQLAlchemy for reliable, high-performance tracking of document metadata, health records, and conversation history.
 
-> Built for secure, accurate, and rapid health data comprehension.
+### Tech Stack
 
-- **Automated Processing** of uploaded PDF and text documents
-- **Extraction:** text, medications, dates, and medical history
-- **LangGraph Integration:** utilizing state-of-the-art conversational pipelines
+| Component | Technology |
+|---|---|
+| Frontend | React (Vite), CSS |
+| Backend | FastAPI (Python) |
+| Database | PostgreSQL |
+| AI / LLM | Google Gemini API |
+| Processing Pipeline | LangGraph, LangChain |
+| Observability | LangFuse |
+| Deployment | Docker, Docker Compose |
 
-<hr style="height:2px;border:none;background:linear-gradient(90deg,#00c6ff,#0072ff);border-radius:1px;">
+---
 
-## 🧠 Deep Analysis Capabilities
+## Installation and Deployment
 
-The HealthLoom backend is a highly capable and specifically engineered system for medical text reasoning:
+### Docker Deployment (Recommended)
 
-* **⚡ Optimized Document Processing:** Utilizes advanced parsing libraries and hash-tracking to ensure documents are not re-processed unnecessarily.
-* **💊 Medication Extractor:** A specific node focused on identifying prescriptions, dosages, and warnings.
-* **💬 Interactive Conversation Router:** Routes user questions between the database, document context, or general health knowledge.
+1. Clone the repository.
+2. Configure `.env` variables if required.
+3. Build and start the containers:
+   ```bash
+   docker-compose up --build
+   ```
+4. Access the application at `http://localhost:5173`.
 
-<hr style="height:2px;border:none;background:linear-gradient(90deg,#00c6ff,#0072ff);border-radius:1px;">
+### Local Development
 
-## 🛠 Tech Stack
+**Backend:**
+1. Navigate to the `backend/` directory.
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Start the server:
+   ```bash
+   uvicorn main:app --reload
+   ```
 
-<div align="center">
+**Frontend:**
+1. Navigate to the `frontend/` directory.
+2. Install dependencies and start the development server:
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-| Layer | Technology |
-|-------|-------------|
-| 🎨 Frontend | React (Vite) + CSS |
-| ⚙️ Backend | FastAPI (Python) |
-| 🗄️ Database | SQLite |
-| 🧠 AI Engine | LangGraph / LangChain |
-| 🐳 Packaging | Docker & Docker Compose |
+---
 
-</div>
+## Project Structure
 
-<p align="center">
-  <img src="https://img.shields.io/badge/React-18-blue?logo=react&logoColor=white&style=for-the-badge" />
-  <img src="https://img.shields.io/badge/FastAPI-Modern-green?logo=fastapi&style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Docker-Containerized-blueviolet?logo=docker&logoColor=white&style=for-the-badge" />
-</p>
-
-<hr style="height:2px;border:none;background:linear-gradient(90deg,#00c6ff,#0072ff);border-radius:1px;">
-
-## 🚀 Quick Install
-
-### 🐳 Using Docker
-1. Clone the repository
-2. Configure `.env` variables if needed
-3. Run `docker-compose up --build`
-4. Access the frontend at `http://localhost:5173`
-
-### 💻 Local Run
-1. Go to `backend/` and run `pip install -r requirements.txt` followed by `uvicorn main:app --reload`
-2. Go to `frontend/` and run `npm install` followed by `npm run dev`
-
-<hr style="height:2px;border:none;background:linear-gradient(90deg,#00c6ff,#0072ff);border-radius:1px;">
-
-## 📁 Project Structure
-
-```
+```text
 HealthLoom/
-├─ 📂 backend/         # FastAPI, LangGraph nodes, DB schemas
-├─ 📂 frontend/        # React components, UI styling
-├─ 📄 docker-compose.yml 
-├─ 📄 README.md        # Documentation
+├─ backend/           # FastAPI application, LangGraph pipelines, Database schemas
+├─ frontend/          # React application, UI components
+├─ docker-compose.yml # Container orchestration configuration
+├─ README.md          # Project documentation
 ```
 
-<hr style="height:2px;border:none;background:linear-gradient(90deg,#00c6ff,#0072ff);border-radius:1px;">
+---
 
-## 🔮 Roadmap
+## Roadmap
 
-- 📱 Mobile responsiveness improvements
-- 🩺 Multi-user support
-- 📊 Data visualization for health metrics
+* Improve mobile interface responsiveness.
+* Implement multi-user authentication and session management.
+* Add data visualization for extracted health metrics.
 
-<hr style="height:2px;border:none;background:linear-gradient(90deg,#00c6ff,#0072ff);border-radius:1px;">
+---
 
-## 📜 License
+## License
 
-
-
-<hr style="height:2px;border:none;background:linear-gradient(90deg,#00c6ff,#0072ff);border-radius:1px;">
-
-<div align="center">
-
-**Built with ❤️.**
-
-[![GitHub stars](https://img.shields.io/github/stars/MatinHoseiny/HealthLoom?style=social)](https://github.com/MatinHoseiny/HealthLoom)
-[![GitHub forks](https://img.shields.io/github/forks/MatinHoseiny/HealthLoom?style=social)](https://github.com/MatinHoseiny/HealthLoom)
-</div>
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
